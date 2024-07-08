@@ -25,6 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       numero_vuelo: numeroVuelo2,
       cargaSalmon: cargaSalmon2,
       cargaGeneral: cargaGeneral2
+      //fil
     }
   })
   
