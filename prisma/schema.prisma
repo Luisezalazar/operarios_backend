@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model formulario {
+  id_formulario  BigInt    @id @unique @default(autoincrement())
+  hora           String?
+  actividad      String?
+  tipo_actividad String?
+  id_operario    BigInt?
+  id_vehiculo    BigInt?
+  numero_vuelo   String?
+  cargaSalmon    String?
+  cargaGeneral   String?
+  operario       operario? @relation(fields: [id_operario], references: [id_operario], onDelete: NoAction, onUpdate: NoAction, map: "id_operario")
+  vehiculo       vehiculo? @relation(fields: [id_vehiculo], references: [id_vehiculo], onDelete: NoAction, onUpdate: NoAction, map: "id_vehiculo")
+
+  @@map(" formulario")
+}
+
+model operario {
+  id_operario       BigInt              @id
+  nombre            String?
+  apellido          String?
+  rut               String?
+  tica              String?
+  formulario        formulario[]
+  operario_vehiculo operario_vehiculo[] @ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model operario_vehiculo {
+  id_operario BigInt?
+  id_vehiculo BigInt?
+  operario    operario? @relation(fields: [id_operario], references: [id_operario], onDelete: NoAction, onUpdate: NoAction, map: "id_operario")
+  vehiculo    vehiculo? @relation(fields: [id_vehiculo], references: [id_vehiculo], onDelete: NoAction, onUpdate: NoAction, map: "id_vehiculo")
+
+  @@ignore
+}
+
+model vehiculo {
+  id_vehiculo       BigInt              @id
+  modelo            String?
+  patente           String?
+  formulario        formulario[]
+  operario_vehiculo operario_vehiculo[] @ignore
+}
